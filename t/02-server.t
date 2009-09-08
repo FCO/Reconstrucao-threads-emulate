@@ -10,7 +10,7 @@ BEGIN {
     use_ok( 'threads::emulate::Server' );
 }
 
-unlink ".teste.log" if -f ".teste.log";
+unlink ".test.log" if -f ".test.log";
 
 ok(ref (my $obj = threads::emulate::Server->new) eq "threads::emulate::Server");
 ok(ref ($obj->logger) eq "threads::emulate::Logger");
