@@ -72,6 +72,9 @@ ok($text_log =~ /^\w{3} \w{3}\s+\d{1,2} \d{2}:\d{2}:\d{2} \d{4}: \[DEBUG\] test 
 close $fh;
 unlink $fname;
 
+$fname = tmpnam;
+$log->testFile($fname);
+
 $log->level(99);
 $log->testName("lalala");
 ok(not $log->test("testing the test", "Testing the test method"));

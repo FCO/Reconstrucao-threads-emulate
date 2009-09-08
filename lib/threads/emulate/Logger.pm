@@ -16,7 +16,7 @@ for my $level (keys %levels){
    eval qq|
            sub $level {
               my \$self = shift;
-              return \$self->log(uc "[$level]", \@_) if $levels{$level} <= \$self->level and not \$self->testName;
+              return \$self->log(uc "[$level]", \@_) if $levels{$level} <= \$self->level;
               return
            }
           |;
@@ -42,6 +42,7 @@ coerce 'LogLevel'
 ;
 has level    => (is => 'rw', isa => 'LogLevel', default => 0, coerce => 1);
 has logFile  => (is => 'rw', isa => 'Str', default => undef);
+has testFile => (is => 'rw', isa => 'Str', default => undef);
 has testName => (is => 'rw', isa => 'Str', default => undef);
 
 override new => sub {
@@ -57,7 +58,7 @@ override new => sub {
 sub log {
    my $self = shift;
    my $ret;
-   if(defined $self->logFile){
+   if($self->logFile){
       open my $LOGFILE, ">>", $self->logFile;
       $ret = print {$LOGFILE} scalar(localtime time), ": @_$/";
       close $LOGFILE;
@@ -73,8 +74,8 @@ sub test {
    return unless $self->level >= 100 and defined $self->testName and $self->testName eq $testName;
    $self->debug("Runing test", $testName);
    my $ret;
-   if(defined $self->logFile){
-      open my $LOGFILE, ">>", $self->logFile;
+   if(defined $self->testFile){
+      open my $LOGFILE, ">>", $self->testFile;
       $ret = print {$LOGFILE} "@_$/";
       close $LOGFILE;
    } else {
